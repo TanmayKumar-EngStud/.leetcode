@@ -40,14 +40,15 @@
 // @lc code=start
 class Solution {
 public:
-// There is error in this code. [Need to fix this code later.]
-
+    int div(int x){
+        if(x%2==0){
+            return x/2;
+        }
+        else{
+            return (x+1)/2;
+        }
+    }
     string reverseWords(string s) {
-        //first we need to change the String into char Array.
-        // Sample :-
-        // string temp = "cat";
-        // char * tab2 = new char [temp.length()+1];
-        // strcpy (tab2, temp.c_str());
         vector<int> spaceIndex = {-1};
         char * c = new char[s.length()+1];
         strcpy(c, s.c_str());
@@ -57,20 +58,34 @@ public:
             }
         }
         spaceIndex.push_back(s.length());
-        int i=0;
-        for(int x= spaceIndex[i]; i<spaceIndex.size(); x=spaceIndex[++i]){
-            //now we have to do mirroring of all the
-            // words that are lying in between spaceIndex[i]<-> spaceIndex[++i];
-            if(i != spaceIndex.size()-1){// this condition is needed to prevent it from unnecessary heap-overflow.
-                // index will range from [(x+1), (spaceIndex[i+1]-1)] !note that here don't do i++ or ++i inside the spaceIndexing. otherwise the value of i will also change.
-                int j = 0;
-                for (char alpha = c[x+1]; j < spaceIndex[i+1]; alpha= c[(x+1)+(++j)]){
-                    cout<<alpha;
-                }
-                cout<<endl;
+        
+        for(int i =0; i< spaceIndex.size()-1; i++){
+            // it will tell the particular location of all the spaces.
+            // for every element in between the spaces.
+            // i.e from c[spaceIndex[i]+1] till c[spaceIndex[i+1] -1]]
+            // here the total number of elements in that particular word will be 
+            // spaceIndex[i+1]-1 - (spaceIndex[i]+1)+1;
+            // therefore the total number of elements will be spaceIndex[i+1] - (spaceIndex[i]+1)
+            // so we need to take the div of,
+            // := div(spaceIndex[i+1]-spaceIndex[i]-1);
+            // we have to do mirroring of those elements that are going to lie in this range.
+            
+            for(int j = 0; j <div(spaceIndex[i+1]-spaceIndex[i]-1); j++){
+                // here the value of j is the indexing range of the particular element
+                // creating a temp character holder.
+                char temp = c[spaceIndex[i]+1+j];
+                c[spaceIndex[i]+1+j] = c[(spaceIndex[i+1]-1)-j]; 
+                //here spaceIndex[i+1]-1 represent the last element of that element.
+                 c[(spaceIndex[i+1]-1)-j] = temp;
             }
         }
-        return s;
+        string ans="";
+        for(int g=0; g<s.length(); g++){
+            ans+=c[g];
+        }
+        return ans;
+        // Time complexity = O(n**2)
+        // Space Complexity = O(n)
     }
 };
 // @lc code=end
