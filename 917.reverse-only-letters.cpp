@@ -47,51 +47,32 @@
 
 // @lc code=start
 class Solution {
-    // I will do this question later, this question is not that difficult, we just have to ignore the cases where the a[i] == '-'; that's it 👍
 public:
-    int div(int x){
-        if(x%2 ==0 ){
-            return x/2;
-        }
-        else{
-            return (x+1)/2;
-        }
-    }
     string reverseOnlyLetters(string s) {
-        char *a = new char[s.length()+1];// because char has a bad habbit to store '\0' in the end. 'O(1)'
-        strcpy(a,s.c_str()); //created the string into character array. 'O(n)'
+        
+        // s[s.length()-1-backward]>='a'&&s[s.length()-1-backward]<='z' || s[s.length()-1-backward]>= 'A' && s[s.length()-1-backward]<= 'Z'
         int forward = 0;
         int backward = 0;
-        for(int i = 0; i<div(s.length()); i++){
-            if (a[s.length()-backward]!='-'){
-                if(a[forward]!= '-'){
-                    char temp = a[forward];
-                    a[forward]= a[s.length()- backward];
-                    a[s.length()- backward] = temp;
-                    backward++;
-                    forward++;
-                }
-                else{
-                    forward++;
-                }
+        if(s.length()==1){
+            return s;
+        }
+        while(forward <= s.length()-1-backward){
+            if(((s[forward]>='a'&&s[forward]<='z') || (s[forward]>= 'A' && s[forward]<= 'Z'))&&((s[s.length()-1-backward]>='a'&&s[s.length()-1-backward]<='z') || (s[s.length()-1-backward]>= 'A' && s[s.length()-1-backward]<= 'Z'))){
+                char temp = s[forward];
+                s[forward] = s[s.length()-1-backward];
+                s[s.length()-1-backward] = temp;
+                forward++;
+                backward++;
             }
-            else if (a[forward]!='-'){
-                if(a[s.length() - backward]!= '-'){
-                    char temp = a[forward];
-                    a[forward]= a[s.length() - backward];
-                    a[s.length() - backward] = temp;
-                    backward++;
-                    forward++;
+            else{
+                if(!((s[forward]>='a'&&s[forward]<='z') || (s[forward]>= 'A' && s[forward]<= 'Z'))){
+                    ++forward;
                 }
-                else{
-                    backward++;
+                if(!((s[s.length()-1-backward]>='a'&&s[s.length()-1-backward]<='z' )|| (s[s.length()-1-backward]>= 'A' && s[s.length()-1-backward]<= 'Z'))){
+                    ++backward;
                 }
             }
         }
-        for(int i = 0; i < s.length(); i++){
-            cout<<a[i];
-        }
-
         return s;
     }
 };
